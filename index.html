@@ -1,0 +1,860 @@
+{% load socialaccount %}
+{% load static i18n %}
+{% load rcmb_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RCMBase</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/media/images/logo_mini2.png" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+{#    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">#}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+{% if request.user.role is None %}
+<script>
+  window.location.href = "{% url 'polls:login_user' %}"
+</script>
+{% endif %}
+<body>
+<div class="body">
+    {% include "header.html"%}
+    <div id="confirmations">
+        <div class="confirmation-dialog" id="logout-dialog">
+          <div id="confirmation-dialog-content" class="confirmation-dialog-content">
+            <h3>{% trans 'Вы хотите выйти?' %}</h3>
+              <div class="confirmation-button-block">
+                  <button class="modify-button status-green" id="cancel-delete-button">{% trans 'отменить' %}</button>
+                  <a href="{% url 'polls:logout_user' %}" style="text-decoration: none"><button class="modify-button status-red">{% trans 'выйти' %}</button></a>
+              </div>
+          </div>
+        </div>
+
+        <div class="confirmation-dialog" id="delete-invtech-dialog">
+          <div id="confirmation-dialog-content" class="confirmation-dialog-content">
+            <h3>{% trans 'Вы хотите удалить <br> новую технологию?' %}</h3>
+              <div class="confirmation-button-block">
+                  <button class="modify-button status-green" id="cancel-delete-button">{% trans 'отменить' %}</button>
+                  <button class="modify-button status-red" type="submit" id="confirm-itdelete-button" onclick="deleteInvtech(event)">{% trans 'удалить' %}</button>
+              </div>
+          </div>
+        </div>
+
+        <div class="confirmation-dialog" id="delete-tit-dialog">
+          <div id="confirmation-dialog-content" class="confirmation-dialog-content">
+            <h3>{% trans 'Вы хотите удалить <br> заявку на новую технологию?' %}</h3>
+              <div class="confirmation-button-block">
+                  <button class="modify-button status-green" id="cancel-delete-button">{% trans 'отменить' %}</button>
+                  <button class="modify-button status-red" type="submit" id="confirm-titdelete-button" onclick="deleteTit(event)">{% trans 'удалить' %}</button>
+              </div>
+          </div>
+        </div>
+
+        <div class="confirmation-dialog" id="delete-karzav-dialog">
+          <div id="confirmation-dialog-content" class="confirmation-dialog-content">
+            <h3>{% trans 'Вы хотите удалить материал?' %}</h3>
+              <div class="confirmation-button-block">
+                  <button class="modify-button status-green" id="cancel-delete-button">{% trans 'отменить' %}</button>
+                  <button class="modify-button status-red" type="submit" id="confirm-kzdelete-button" onclick="deleteKarzav(event)">{% trans 'удалить' %}</button>
+              </div>
+          </div>
+        </div>
+
+        <div class="confirmation-dialog" id="delete-tempkarzav-dialog">
+          <div id="confirmation-dialog-content" class="confirmation-dialog-content">
+            <h3>{% trans 'Вы хотите удалить заявку на карьер, завод или хранилище битума?' %}</h3>
+              <div class="confirmation-button-block">
+                  <button class="modify-button status-green" id="cancel-delete-button">отменить</button>
+                  <button class="modify-button status-red" type="submit" id="confirm-tempkzdelete-button" onclick="deleteTempKarzav(event)">{% trans 'удалить' %}</button>
+              </div>
+          </div>
+        </div>
+
+        <div class="confirmation-dialog" id="delete-tkz-dialog">
+          <div id="confirmation-dialog-content" class="confirmation-dialog-content">
+            <h3>{% trans 'Вы хотите удалить заявку на материал?' %}</h3>
+              <div class="confirmation-button-block">
+                  <button class="modify-button status-green" id="cancel-delete-button">{% trans 'отменить' %}</button>
+                  <button class="modify-button status-red" type="submit" id="confirm-tkzdelete-button" onclick="deleteTkz(event)">{% trans 'удалить' %}</button>
+              </div>
+          </div>
+        </div>
+
+        <div class="confirmation-dialog" id="edit-profile-dialog">
+          <div id="confirmation-dialog-content" class="confirmation-dialog-content" style="text-align: left">
+            <h3>{% trans 'Персональные данные' %}</h3>
+              <form action="{% url 'polls:profile' %}" method="POST" class="login-block" style="border: none; padding: 0">
+                  {% csrf_token %}
+                  <div class="input-auth-line">
+                      <div class="login-input-label">
+                        <label for="first_name">{% trans 'Имя' %}</label>
+                        <input type="text" id="first_name" name="{{ form.first_name.name }}" value="{{request.user.first_name}}" placeholder="{% trans 'Имя' %}" required>
+                      </div>
+                      <div class="login-input-label">
+                        <label for="last_name">{% trans 'Фамилия' %}</label>
+                        <input type="text" id="last_name" name="{{ form.last_name.name }}" class="fadeIn third" value="{{request.user.last_name}}" placeholder="{% trans 'Фамилия' %}" required>
+                      </div>
+                  </div>
+                  <div class="input-auth-line" >
+                      <div class="login-input-label">
+                        <label for="patronymic">{% trans 'Отчество' %}</label>
+                        <input type="text" id="patronymic" name="{{ form.patronymic.name }}" class="fadeIn third" value="{{request.user.patronymic}}" placeholder="{% trans 'Отчество' %}">
+                      </div>
+                      <div class="login-input-label">
+                        <label for="phone">{% trans 'Номер телефона' %}</label>
+                        <input type="text" id="phone" name="{{ form.contacts.name }}" value="{{request.user.contacts}}" pattern="^\+7(\s+)?\(?7[0-9]{2}\)?(\s+)?[0-9]{3}-?[0-9]{2}-?[0-9]{2}$" placeholder="+7 (7__) ___-__-__" required>
+                      </div>
+                  </div>
+                  <div class="input-auth-line">
+                      <div class="login-input-label">
+                        <label for="company">{% trans 'Компания' %}</label>
+                        <input type="text" id="company" name="{{ form.company.name }}" class="fadeIn third solo" value="{{request.user.company}}" placeholder="{% trans 'Компания' %}" required>
+                      </div>
+                  </div>
+                  <div class="input-auth-line" style="justify-content: flex-end">
+                      <a class="modify-button status-green" id="cancel-delete-button">{% trans 'отменить' %}</a>
+                      <button class="modify-button status-green" type="submit" id="login" value="Log In">{% trans 'Завершить' %}</button>
+{#                      <button type="submit" id="login" class="button-auth fadeIn third solo" value="Log In">Завершить</button>#}
+                  </div>
+              </form>
+          </div>
+        </div>
+
+    </div>
+
+
+
+  <div class="main">
+     <div class="container">
+        <div class="title-profile">
+          <h1>{% trans 'Профиль' %}</h1>
+          <div class="profile-buttons">
+              <a href="#" id="edit_profile_button">
+                  <div class="profile-button">{% trans 'Редактировать' %}</div>
+                  <img src="/media/images/icons/edit.svg">
+              </a>
+              <a href="#" id="logout_button"><div class="profile-button">{% trans 'Выйти' %}</div></a>
+          </div>
+        </div>
+        <div class="content">
+            <div class="profile-content">
+                <div style="padding-right: 2.5rem">
+                    <div class="profile-first">
+                        <div class="profile-avatar">
+                            <i class="svg-icon fas fa-user-circle" style="font-size: 5.875rem; color: #00A4BC;"></i>
+                            <div class="profile-avatar-info">
+                                <strong>{{ request.user.first_name }} {{ request.user.last_name }} {{ request.user.patronymic }}</strong>
+                                <div>
+                                    <span>{{ request.user.role }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="profile-info">
+                            <div class="profile-info-block">
+                                <table>
+                                    <tr><td><strong>{% trans 'Почта' %} </strong></td><td>{{ request.user.email }}</td></tr>
+                                    <tr><td><strong>{% trans 'Телефон' %} </strong></td><td>{{ request.user.contacts }}</td></tr>
+                                    <tr><td><strong>{% trans 'Компания' %} </strong></td><td>{{ request.user.company }}</td></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {#  СУПЕРАДМИН И АДМИН #}
+                {% if request.user.role.id is 4 or request.user.role.id is 3 %}
+                    <div class="profile-lists">
+                        <div class="title-profile">
+                            <h1>{% trans 'Пользователи' %}</h1>
+                        </div>
+                        <div class="profile-superadmin-lists">
+                            <a href="{% url 'polls:list_admin' %}" class="profile-superadmin-list">{% trans 'Админы' %}</a>
+                            <a href="{% url 'polls:list_projector' %}" class="profile-superadmin-list">{% trans 'Проектировщики' %}</a>
+                            <a href="{% url 'polls:list_provider' %}" class="profile-superadmin-list">{% trans 'Поставщики / Производители' %}</a>
+                            <a href="{% url 'polls:list_guest' %}" class="profile-superadmin-list">{% trans 'Гости' %}</a>
+                            {% if request.user.role.id is 4 %}
+                                <a href="{% url 'polls:create_user' %}" class="profile-superadmin-create-link" style="">+ &nbsp; {% trans 'Добавить пользователя' %}</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+                {% if request.user.role.id is 4 or request.user.role.id is 3 or request.user.role.id is 2 %}
+                    {% if invtechs %}
+                    <div>
+                        <div class="title-profile">
+                            <h1>{% trans 'Новые технологий' %}</h1>
+                        </div>
+                        <div id="container1" class="container1">
+                          <div id="slider-container">
+                            <span onclick="slideRight('container1')" class="btn"><i class="fa-solid fa-chevron-left"></i></span>
+                            <div id="slider" class="slider">
+
+                              {% for it in invtechs %}
+                              <div class="slide">
+                                <div class="slide-header">
+                                  <div class="slide-status 
+                                    {% if it.status == 'апробирован' %}
+                                        status-green
+                                    {% elif it.status == 'повторное рассмотрение' %}
+                                        status-blue
+                                    {% elif it.status == 'на стадии апробации' %}
+                                        status-yellow
+                                    {% else %}
+                                        status-gray
+                                    {% endif %}">
+                                    {% if it.status == 'повторное рассмотрение' %}
+                                        повт. рассмотрение
+                                    {% else %}
+                                        {{ it.status }}
+                                    {% endif %}
+                                  </div>
+                                  <div class="slide-buttons">
+                                    <a id="iteditbtn" onclick="it_editClicked({{ it.it_id }})"><img src="/media/images/icons/edit.svg" class="edit_link" alt="" sizes="24px" ></a>
+                                    {% if request.user.role.id is 4 %}
+                                      <a id="itdeletebtn" onclick="it_deleteClicked({{ it.it_id }})"><img src="/media/images/icons/delete.svg" class="delete_link" alt="" sizes="24px" ></a>
+                                    {% endif %}
+                                  </div>
+                                </div>
+{#                                  onclick="it_showClicked({{ it.it_id }})"#}
+                                <a href="{% url 'invtech_infov' it.it_id %}" id="itshowbtn"  style="text-decoration: none">
+                                  <div class="slide-body">
+                                    <p>{{ it.invtech }}</p>
+                                    <span><strong>{% trans 'Область применения' %}:</strong> <br>
+                                      {{ it.usingarea|list_str }}</span>
+                                  </div>
+                                </a>
+                              </div>
+                              {% endfor %}
+
+                            </div>
+                            <span onclick="slideLeft('container1')" class="btn"><i class="fa-solid fa-chevron-right"></i></span>
+                          </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if materials %}
+                        <div>
+                            <div class="title-profile">
+                                <h1>{% trans 'Материалы' %}</h1>
+                            </div>
+                            <div id="container2" class="container1">
+                              <div id="slider-container">
+                                <span onclick="slideRight('container2')" class="btn"><i class="fa-solid fa-chevron-left"></i></span>
+                                <div id="slider" class="slider">
+
+                                  {% for kz in materials %}
+                                  <div class="slide">
+                                    <div class="slide-header">
+                                      <div class="slide-status
+                                        {% if kz.karzav_card.status == 'действующий' %}
+                                            status-green
+                                        {% else %}
+                                            status-gray
+                                        {% endif %}">
+                                            {{ kz.karzav_card.status }}
+                                      </div>
+                                      <div class="slide-buttons">
+                                        <a id="iteditbtn" onclick="kz_editClicked({{ kz.mat_id }})"><img src="/media/images/icons/edit.svg" class="edit_link" alt="" sizes="24px" ></a>
+                                        {% if request.user.role.id is 4 %}
+                                          <a id="itdeletebtn" onclick="kz_deleteClicked({{ kz.mat_id }})"><img src="/media/images/icons/delete.svg" class="delete_link" alt="" sizes="24px" ></a>
+                                        {% endif %}
+                                      </div>
+                                    </div>
+                                    <a href="{% url 'fizmeh_harvv' kz.mat_id %}" id="itshowbtn" style="text-decoration: none">
+                                      <div class="slide-body">
+                                        <p>{{ kz.material_name }}</p>
+                                        <span><strong>{% trans 'Недропользователь' %}: </strong> <br>
+                                          {{ kz.karzav_card.nedrouser }} ({{ kz.karzav_card.mestorojdenie }})</span>
+                                      </div>
+                                    </a>
+                                  </div>
+                                  {% endfor %}
+
+                                </div>
+                                <span onclick="slideLeft('container2')" class="btn"><i class="fa-solid fa-chevron-right"></i></span>
+                              </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if temp_invtechs %}
+                        <div>
+                            <div class="title-profile">
+                                <h1>{% trans 'Заявки по технологиям' %}</h1>
+                            </div>
+                            <div id="container3" class="container1">
+                              <div id="slider-container">
+                                <span onclick="slideRight('container3')" class="btn"><i class="fa-solid fa-chevron-left"></i></span>
+                                <div id="slider" class="slider">
+
+                                {% for t_it in temp_invtechs %}
+                                  <div class="slide">
+                                    <div class="slide-header">
+                                      <div class="slide-status
+                                        {% if t_it.sent_status == 'в ожиданий' %}
+                                            status-gray
+                                        {% else %}
+                                            status-red
+                                        {% endif %}">
+                                        {{ t_it.sent_status }}
+                                      </div>
+                                      <div class="slide-buttons">
+                                        <a id="titeditbtn" onclick="tit_editClicked({{ t_it.it_id }})"><img src="/media/images/icons/edit.svg" class="edit_link" alt="" sizes="24px" ></a>
+                                        {% if request.user.role.id is 4 %}
+                                          <a id="titdeletebtn" onclick="tit_deleteClicked({{ t_it.it_id }})"><img src="/media/images/icons/delete.svg" class="delete_link" alt="" sizes="24px" ></a>
+                                        {% endif %}
+                                      </div>
+                                    </div>
+                                    <a href="#" id="titshowbtn" onclick="tit_showClicked({{ t_it.it_id }})" style="text-decoration: none">
+                                      <div class="slide-body">
+                                        <p> {{ t_it.invtech }}</p>
+                                        <span><strong>{% trans 'Область применения' %}:</strong> <br>
+                                         {{ t_it.usingarea|list_str }}</span>
+                                        {% if t_it.comments %}
+                                              <span><strong>Причина: </strong> <br>
+                                              {{ t_it.comments }}</span>
+                                        {% endif %}
+                                      </div>
+                                    </a>
+                                  </div>
+                                  {% endfor %}
+
+                                </div>
+                                <span onclick="slideLeft('container3')" class="btn"><i class="fa-solid fa-chevron-right"></i></span>
+                              </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if temp_karzavs %}
+                        <div>
+                            <div class="title-profile">
+                                <h1>{% trans 'Заявки по карьерам, заводам и хранилищам битума' %}</h1>
+                            </div>
+                            <div id="container5" class="container1">
+                              <div id="slider-container">
+                                <span onclick="slideRight('container5')" class="btn"><i class="fa-solid fa-chevron-left"></i></span>
+                                <div id="slider" class="slider">
+
+                                  {% for kz in temp_karzavs %}
+                                  <div class="slide">
+                                    <div class="slide-header">
+                                      <div class="slide-status
+                                        {% if kz.sent_status == 'в ожиданий' %}
+                                            status-gray
+                                        {% else %}
+                                            status-red
+                                        {% endif %}">
+                                            {{ kz.sent_status }}
+                                      </div>
+                                      <div class="slide-buttons">
+                                        <a id="iteditbtn" onclick="karzav_editClicked({{ kz.nedro_id }})"><img src="/media/images/icons/edit.svg" class="edit_link" alt="" sizes="24px" ></a>
+                                        {% if request.user.role.id is 4 %}
+                                          <a id="itdeletebtn" onclick="karzav_deleteClicked({{ kz.nedro_id }})"><img src="/media/images/icons/delete.svg" class="delete_link" alt="" sizes="24px" ></a>
+                                        {% endif %}
+                                      </div>
+                                    </div>
+                                    <a href="#" id="itshowbtn" onclick="karzav_showClicked({{ kz.nedro_id }})" style="text-decoration: none">
+                                      <div class="slide-body">
+                                        <p>{{ kz.nedrouser }}</p>
+                                        <span><strong>{% trans 'Месторождение' %}: </strong> <br>
+                                          {{ kz.mestorojdenie }}</span>
+                                          {% if kz.comments %}
+                                              <span><strong>{% trans 'Причина' %}: </strong> <br>
+                                              {{ kz.comments }}</span>
+                                          {% endif %}
+                                      </div>
+                                    </a>
+                                  </div>
+                                  {% endfor %}
+
+                                </div>
+                                <span onclick="slideLeft('container5')" class="btn"><i class="fa-solid fa-chevron-right"></i></span>
+                              </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if temp_material_list %}
+                        <div>
+                            <div class="title-profile">
+                                <h1>{% trans 'Заявки по материалам' %}</h1>
+                            </div>
+                            <div id="container4" class="container1">
+                              <div id="slider-container">
+                                <span onclick="slideRight('container4')" class="btn"><i class="fa-solid fa-chevron-left"></i></span>
+                                <div id="slider" class="slider">
+
+                                  {% for t_kz, kz_fk in temp_material_list %}
+                                  <div class="slide">
+                                    <div class="slide-header">
+                                      <div class="slide-status
+                                        {% if t_kz.sent_status == 'в ожиданий' %}
+                                            status-gray
+                                        {% else %}
+                                            status-red
+                                        {% endif %}">
+                                            {{ t_kz.sent_status }}
+                                      </div>
+                                      <div class="slide-buttons">
+                                        <a id="tkzeditbtn" onclick="tkz_editClicked({{ t_kz.mat_id }})"><img src="/media/images/icons/edit.svg" class="edit_link" alt="" sizes="24px" ></a>
+                                        {% if request.user.role.id is 4 %}
+                                          <a id="tkzdeletebtn" onclick="tkz_deleteClicked({{ t_kz.mat_id }})"><img src="/media/images/icons/delete.svg" class="delete_link" alt="" sizes="24px" ></a>
+                                        {% endif %}
+                                      </div>
+                                    </div>
+                                    <a href="#" id="tkzshowbtn" onclick="tkz_showClicked({{ t_kz.mat_id }})" style="text-decoration: none">
+                                      <div class="slide-body">
+                                        <p>{{ t_kz.material }}</p>
+                                        <span><strong>{% trans 'Недропользователь' %}: </strong> <br>
+                                          {{ kz_fk.nedrouser }}</span>
+                                        {% if t_kz.comments %}
+                                              <span><strong>{% trans 'Причина' %}: </strong> <br>
+                                              {{ t_kz.comments }}</span>
+                                        {% endif %}
+                                      </div>
+                                    </a>
+                                  </div>
+                                  {% endfor %}
+
+                                </div>
+                                <span onclick="slideLeft('container4')" class="btn"><i class="fa-solid fa-chevron-right"></i></span>
+                              </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <footer>
+      <div class="footer-col1">
+          <div class="ftitle"> <b>{% trans 'Контакты' %}</b> </div>
+          <div class="fval">{% trans 'г. Астана, ул. Жекебатыр 35/1' %}</div>
+          <div class="fval fphones">
+              <a href="tel:+7 (7172) 72-98-17" style="color:black;">+7 (7172) 72-98-17</a>
+          </div>
+          <div class="fvals">
+              <a href="mailto:kense@qazjolgzi.kz" style="color:black;">kense@qazjolgzi.kz</a>
+          </div>
+      </div>
+      <div class="footer-col2">
+                <a href="https://qazjolgzi.kz"><img src="/media/images/logo_qazjol_kz.png" alt="logo" class="logo_qaz"></a>
+          <span>{% trans 'АО “КаздорНИИ”' %}</span>
+          <span>&#169; {% trans 'Все права защищены' %}</span>
+      </div>
+    </footer>
+    </div>
+  </div>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    document.getElementById("logout_button")?.addEventListener("click", function() {
+        document.getElementById("logout-dialog").style.display = "flex";
+    });
+    document.getElementById("edit_profile_button")?.addEventListener("click", function() {
+        document.getElementById("edit-profile-dialog").style.display = "flex";
+    });
+
+
+    // cancel confirmation dialog
+    function addClickListenerToButtons(buttonId, callback) {
+        var buttons = document.querySelectorAll("#" + buttonId);
+        for (var i = 0; i < buttons.length; i++) {
+            buttons[i].addEventListener("click", callback);
+        }
+    }
+    // Custom function to handle the click event for the buttons
+    function handleButtonClick(event) {
+        var conf_dialogs = document.getElementsByClassName("confirmation-dialog");
+        for (var i = 0; i < conf_dialogs.length; i++) {
+            conf_dialogs[i].style.display = "none";
+        }
+    }
+    // Call the custom function to add the event listener to all buttons with the same ID
+    addClickListenerToButtons("cancel-delete-button", handleButtonClick);
+
+    function deleteInvtech(event) {
+        event.preventDefault();
+        var invtechId = $('#confirm-itdelete-button').data('invtech-id');
+        $.ajax({
+            url: '{% url 'invtech_delete' %}',
+            type: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'  // Replace with your Django template syntax
+            },
+            data: {
+                id: invtechId
+            },
+            success: function(response) {
+                if (response.status === 'success') {
+                    console.log(response.message);
+                    window.location.href = "{% url 'polls:profile' %}"
+                } else {
+                    console.error(response.message);
+                }
+            },
+            error: function(xhr, textStatus, error) {
+                console.error('Request failed:', error);
+            }
+        });
+    }
+
+    function deleteKarzav(event) {
+        event.preventDefault();
+        var nedro_id = $('#confirm-kzdelete-button').data('karzav-id');
+        $.ajax({
+            url: '{% url 'material_delete' %}',
+            type: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'  // Replace with your Django template syntax
+            },
+            data: {
+                nedro_id: nedro_id
+            },
+            success: function(response) {
+                if (response.status === 'success') {
+                  console.log(response.message);
+                  window.location.href = "{% url 'polls:profile' %}"
+                } else {
+                  // Error handling
+                  console.error(response.message);
+                  // Display an error message or handle the error in an appropriate way
+                }
+            },
+            error: function(xhr, textStatus, error) {
+                // Error handling
+                console.error('Request failed:', error);
+                // Display an error message or handle the error in an appropriate way
+            }
+        });
+    }
+    function deleteTempKarzav(event) {
+        event.preventDefault();
+        var nedro_id = $('#confirm-tempkzdelete-button').data('karzav-id');
+        $.ajax({
+            url: '{% url 'entapp_karzav_delete' %}',
+            type: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'  // Replace with your Django template syntax
+            },
+            data: {
+                id: nedro_id
+            },
+            success: function(response) {
+                if (response.status === 'success') {
+                  console.log(response.message);
+                  window.location.href = "{% url 'polls:profile' %}"
+                } else {
+                  // Error handling
+                  console.error(response.message);
+                  // Display an error message or handle the error in an appropriate way
+                }
+            },
+            error: function(xhr, textStatus, error) {
+                // Error handling
+                console.error('Request failed:', error);
+                // Display an error message or handle the error in an appropriate way
+            }
+        });
+    }
+
+    function deleteTit(event) {
+        event.preventDefault();
+        var invtechId = $('#confirm-titdelete-button').data('tit-id');
+        $.ajax({
+            url: '{% url 'entapp_invtech_delete' %}',
+            type: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'  // Replace with your Django template syntax
+            },
+            data: {
+                id: invtechId
+            },
+            success: function(response) {
+                if (response.status === 'success') {
+                    console.log(response.message);
+                    window.location.href = "{% url 'polls:profile' %}"
+                } else {
+                    console.error(response.message);
+                }
+            },
+            error: function(xhr, textStatus, error) {
+                console.error('Request failed:', error);
+            }
+        });
+    }
+
+
+    function deleteTkz(event) {
+        event.preventDefault();
+        var nedro_id = $('#confirm-tkzdelete-button').data('tkz-id');
+        $.ajax({
+            url: '{% url 'entapp_material_delete' %}',
+            type: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'  // Replace with your Django template syntax
+            },
+            data: {
+                id: nedro_id
+            },
+            success: function(response) {
+                if (response.status === 'success') {
+                  console.log(response.message);
+                  window.location.href = "{% url 'polls:profile' %}"
+                } else {
+                  // Error handling
+                  console.error(response.message);
+                  // Display an error message or handle the error in an appropriate way
+                }
+            },
+            error: function(xhr, textStatus, error) {
+                // Error handling
+                console.error('Request failed:', error);
+                // Display an error message or handle the error in an appropriate way
+            }
+        });
+    }
+
+    function initializeSlider(sliderId) {
+      var container = document.getElementById(sliderId);
+      var slider = container.querySelector("#slider");
+      var buttons = container.getElementsByClassName("btn");
+
+      var currentPosition = 0;
+      var slidesPerPage = 4;
+      var slidesCount = slider.getElementsByClassName("slide").length - slidesPerPage;
+      var currentMargin = 0;
+
+      window.addEventListener("resize", checkWidth);
+      checkWidth();
+      if (currentPosition === 0) {
+        buttons[0].classList.add("inactive");
+      }
+
+      function checkWidth() {
+        var containerWidth = container.offsetWidth;
+        setParams(containerWidth);
+      }
+
+      function setParams(width) {
+        slidesCount = Math.max(0, slider.getElementsByClassName("slide").length - slidesPerPage);
+
+        if (currentPosition > slidesCount) {
+          currentPosition = slidesCount;
+        }
+        currentMargin = -currentPosition * (19 + 1.5 + .125);
+        slider.style.marginLeft = currentMargin + "rem";
+        if (currentPosition === 0) {
+          buttons[0].classList.add("inactive");
+        } else {
+          buttons[0].classList.remove("inactive");
+        }
+        if (currentPosition >= slidesCount) {
+          buttons[1].classList.add("inactive");
+        } else {
+          buttons[1].classList.remove("inactive");
+        }
+      }
+
+      function slideRight() {
+        if (currentPosition > 0) {
+          currentPosition--;
+          currentMargin = -currentPosition * (19 + 1.5 + .125);
+          slider.style.marginLeft = currentMargin + "rem";
+          buttons[0].classList.remove("inactive");
+          buttons[1].classList.remove("inactive");
+          if (currentPosition === 0) {
+            buttons[0].classList.add("inactive");
+          }
+        }
+      }
+
+      function slideLeft() {
+        if (currentPosition < slidesCount) {
+          currentPosition++;
+          currentMargin = -currentPosition * (19 + 1.5 + .125);
+          slider.style.marginLeft = currentMargin + "rem";
+          buttons[0].classList.remove("inactive");
+          buttons[1].classList.remove("inactive");
+          if (currentPosition === slidesCount) {
+            buttons[1].classList.add("inactive");
+          }
+        }
+      }
+
+      // Assign click event handlers to the buttons
+      buttons[0].onclick = slideRight;
+      buttons[1].onclick = slideLeft;
+    }
+
+
+// Initialize each slider with their respective IDs
+    if (document.getElementById("container1") !== undefined && document.getElementById("container1") !== null) {
+        initializeSlider("container1");
+    }
+    if (document.getElementById("container2") !== undefined && document.getElementById("container2") !== null) {
+        initializeSlider("container2");
+    }
+    if (document.getElementById("container3") !== undefined && document.getElementById("container3") !== null) {
+        initializeSlider("container3");
+    }
+    if (document.getElementById("container4") !== undefined && document.getElementById("container4") !== null) {
+        initializeSlider("container4");
+    }
+    if (document.getElementById("container5") !== undefined && document.getElementById("container5") !== null) {
+        initializeSlider("container5");
+    }
+
+    function eraseCookie(name) {
+        document.cookie = name+'=; Max-Age=-99999999;';
+    }
+    function setCookie(cName, cValue, expDays) {
+        let date = new Date();
+        date.setTime(date.getTime() + (expDays * 24 * 60 * 60 * 1000));
+        const expires = "expires=" + date.toUTCString();
+        document.cookie = cName + "=" + cValue + "; " + expires + "; path=/";
+    };
+
+    {##}
+    {#function it_showClicked(button) {#}
+    {#    var ppit_id1 = button.value;//document.getElementById("itshowbtn").value;#}
+    {#    document.cookie = "ppit_id1=" + ppit_id1;#}
+    {#    setCookie('ppit_id1', ppit_id1);#}
+    {#    setCookie('ppkz_id1', -1);#}
+    {#    //alert(ppit_id1);#}
+    {#    var l = "{% url 'polls:mypublication' %}";#}
+    {#    location.href = l;#}
+    {# };#}
+
+    {#function it_showClicked(id) {#}
+    {#    document.cookie = "alink2=" + id;#}
+    {#    setCookie('alink2', id);#}
+    {#    //alert(ppit_id1);#}
+    {#    var l = "{% url 'invtech_infov' %}";#}
+    {#    location.href = l;#}
+    {# };#}
+    function it_editClicked(id) {
+        var ppit_id2 = id;//document.getElementById("iteditbtn").value;
+        document.cookie = "ppit_id2=" + ppit_id2;
+        setCookie('ppit_id2', ppit_id2);
+        setCookie('pptit_id2', -1);
+        //alert('it_editClicked --- ' + ppit_id2);
+        var l = "{% url 'invtech_edit' %}";
+        location.href = l;
+    };
+    function it_deleteClicked(id) {
+        $('#confirm-itdelete-button').data('invtech-id', id);
+        document.getElementById("delete-invtech-dialog").style.display = "flex";
+    };
+
+    function kz_editClicked(id) {
+        var ppkz_id2 = id;
+        document.cookie = "ppkz_id2=" + ppkz_id2;
+        setCookie('ppkz_id2', ppkz_id2);
+        setCookie('pptkz_id2', -1);
+        //alert('kz_editClicked --- ' + ppkz_id2);
+        var l = "{% url 'material_edit' %}";
+        location.href = l;
+    };
+    function kz_deleteClicked(id) {
+        $('#confirm-kzdelete-button').data('karzav-id', id);
+        document.getElementById("delete-karzav-dialog").style.display = "flex";
+    };
+
+
+
+    function karzav_showClicked(id) {
+        var ppkz_id1 = id;
+        document.cookie = "link_temp_karzav=" + ppkz_id1;
+        setCookie('link_temp_karzav', ppkz_id1);
+        var l = "{% url 'polls:mypublication' %}";
+        location.href = l;
+    };
+    function karzav_editClicked(id) {
+        var ppkz_id2 = id;
+        document.cookie = "pptkz_id2=" + ppkz_id2;
+        setCookie('pptkz_id2', ppkz_id2);
+        setCookie('ppkz_id2', -1);
+        //alert('kz_editClicked --- ' + ppkz_id2);
+        var l = "{% url 'karzav_edit' %}";
+        location.href = l;
+    };
+    function karzav_deleteClicked(id) {
+        $('#confirm-tempkzdelete-button').data('karzav-id', id);
+        document.getElementById("delete-tempkarzav-dialog").style.display = "flex";
+    };
+
+    {#function it_editClicked(button) {#}
+    {#    var ppit_id2 = button.value;//document.getElementById("iteditbtn").value;#}
+    {#    document.cookie = "ppit_id2=" + ppit_id2;#}
+    {#    setCookie('ppit_id2', ppit_id2);#}
+    {#    setCookie('pptit_id2', -1);#}
+    {#    //alert('it_editClicked --- ' + ppit_id2);#}
+    {#    var l = "{% url 'invtech_edit' %}";#}
+    {#    location.href = l;#}
+    {# };#}
+
+    
+    function tit_showClicked(id) {
+        var pptit_id1 = id;//document.getElementById("titshowbtn").value;
+        document.cookie = "pptit_id1=" + pptit_id1;
+        setCookie('pptit_id1', pptit_id1);
+        setCookie('pptkz_id1', -1);
+        //alert(pptit_id1);
+        var l = "{% url 'polls:myapplication' %}";
+        location.href = l;
+    };
+    function tit_editClicked(id) {
+        var pptit_id2 = id;//document.getElementById("titeditbtn").value;
+        document.cookie = "pptit_id2=" + pptit_id2;
+        setCookie('pptit_id2', pptit_id2);
+        setCookie('ppit_id2', -1);
+        //alert('tit_editClicked --- ' + pptit_id2);
+        var l = "{% url 'invtech_edit' %}";
+        location.href = l;
+    };
+    function tit_deleteClicked(id) {
+        $('#confirm-titdelete-button').data('tit-id', id);
+        document.getElementById("delete-tit-dialog").style.display = "flex";
+    }
+
+    function tkz_showClicked(id) {
+        var pptkz_id1 = id;//document.getElementById("tkzshowbtn").value;
+        document.cookie = "pptkz_id1=" + pptkz_id1;
+        setCookie('pptkz_id1', pptkz_id1);
+        setCookie('pptit_id1', -1);
+        //alert(pptkz_id1);
+        var l = "{% url 'polls:myapplication' %}";
+        location.href = l;
+    };
+    function tkz_editClicked(id) {
+        var pptkz_id2 = id;//document.getElementById("titeditbtn").value;
+        document.cookie = "pptkz_id2=" + pptkz_id2;
+        setCookie('pptkz_id2', pptkz_id2);
+        setCookie('ppkz_id2', -1);
+        //alert('tkz_editClicked --- ' + pptkz_id2);
+        var l = "{% url 'material_edit' %}";
+        location.href = l;
+    };
+    function tkz_deleteClicked(id) {
+        $('#confirm-tkzdelete-button').data('tkz-id', id);
+        document.getElementById("delete-tkz-dialog").style.display = "flex";
+    };
+
+    window.onload = function() {
+            MaskedInput({
+               elm: document.getElementById('phone'),
+               format: '+7 (7__) ___-__-__',
+               separator: '+7 (7)--'
+            });
+         };
+    (function(a){a.MaskedInput=function(f){if(!f||!f.elm||!f.format){return null}if(!(this instanceof a.MaskedInput)){return new a.MaskedInput(f)}var o=this,d=f.elm,s=f.format,i=f.allowed||"0123456789",h=f.allowedfx||function(){return true},p=f.separator||"/:-",n=f.typeon||"_YMDhms",c=f.onbadkey||function(){},q=f.onfilled||function(){},w=f.badkeywait||0,A=f.hasOwnProperty("preserve")?!!f.preserve:true,l=true,y=false,t=s,j=(function(){if(window.addEventListener){return function(E,C,D,B){E.addEventListener(C,D,(B===undefined)?false:B)}}if(window.attachEvent){return function(D,B,C){D.attachEvent("on"+B,C)}}return function(D,B,C){D["on"+B]=C}}()),u=function(){for(var B=d.value.length-1;B>=0;B--){for(var D=0,C=n.length;D<C;D++){if(d.value[B]===n[D]){return false}}}return true},x=function(C){try{C.focus();if(C.selectionStart>=0){return C.selectionStart}if(document.selection){var B=document.selection.createRange();return -B.moveStart("character",-C.value.length)}return -1}catch(D){return -1}},b=function(C,E){try{if(C.selectionStart){C.focus();C.setSelectionRange(E,E)}else{if(C.createTextRange){var B=C.createTextRange();B.move("character",E);B.select()}}}catch(D){return false}return true},m=function(D){D=D||window.event;var C="",E=D.which,B=D.type;if(E===undefined||E===null){E=D.keyCode}if(E===undefined||E===null){return""}switch(E){case 8:C="bksp";break;case 46:C=(B==="keydown")?"del":".";break;case 16:C="shift";break;case 0:case 9:case 13:C="etc";break;case 37:case 38:case 39:case 40:C=(!D.shiftKey&&(D.charCode!==39&&D.charCode!==undefined))?"etc":String.fromCharCode(E);break;default:C=String.fromCharCode(E);break}return C},v=function(B,C){if(B.preventDefault){B.preventDefault()}B.returnValue=C||false},k=function(B){var D=x(d),F=d.value,E="",C=true;switch(C){case (i.indexOf(B)!==-1):D=D+1;if(D>s.length){return false}while(p.indexOf(F.charAt(D-1))!==-1&&D<=s.length){D=D+1}if(!h(B,D)){c(B);return false}E=F.substr(0,D-1)+B+F.substr(D);if(i.indexOf(F.charAt(D))===-1&&n.indexOf(F.charAt(D))===-1){D=D+1}break;case (B==="bksp"):D=D-1;if(D<0){return false}while(i.indexOf(F.charAt(D))===-1&&n.indexOf(F.charAt(D))===-1&&D>1){D=D-1}E=F.substr(0,D)+s.substr(D,1)+F.substr(D+1);break;case (B==="del"):if(D>=F.length){return false}while(p.indexOf(F.charAt(D))!==-1&&F.charAt(D)!==""){D=D+1}E=F.substr(0,D)+s.substr(D,1)+F.substr(D+1);D=D+1;break;case (B==="etc"):return true;default:return false}d.value="";d.value=E;b(d,D);return false},g=function(B){if(i.indexOf(B)===-1&&B!=="bksp"&&B!=="del"&&B!=="etc"){var C=x(d);y=true;c(B);setTimeout(function(){y=false;b(d,C)},w);return false}return true},z=function(C){if(!l){return true}C=C||event;if(y){v(C);return false}var B=m(C);if((C.metaKey||C.ctrlKey)&&(B==="X"||B==="V")){v(C);return false}if(C.metaKey||C.ctrlKey){return true}if(d.value===""){d.value=s;b(d,0)}if(B==="bksp"||B==="del"){k(B);v(C);return false}return true},e=function(C){if(!l){return true}C=C||event;if(y){v(C);return false}var B=m(C);if(B==="etc"||C.metaKey||C.ctrlKey||C.altKey){return true}if(B!=="bksp"&&B!=="del"&&B!=="shift"){if(!g(B)){v(C);return false}if(k(B)){if(u()){q()}v(C,true);return true}if(u()){q()}v(C);return false}return false},r=function(){if(!d.tagName||(d.tagName.toUpperCase()!=="INPUT"&&d.tagName.toUpperCase()!=="TEXTAREA")){return null}if(!A||d.value===""){d.value=s}j(d,"keydown",function(B){z(B)});j(d,"keypress",function(B){e(B)});j(d,"focus",function(){t=d.value});j(d,"blur",function(){if(d.value!==t&&d.onchange){d.onchange()}});return o};o.resetField=function(){d.value=s};o.setAllowed=function(B){i=B;o.resetField()};o.setFormat=function(B){s=B;o.resetField()};o.setSeparator=function(B){p=B;o.resetField()};o.setTypeon=function(B){n=B;o.resetField()};o.setEnabled=function(B){l=B};return r()}}(window));
+</script>
