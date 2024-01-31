@@ -331,7 +331,7 @@
 }
 
 .projects > .top-project {
-    transform: translateY(calc(max(0, min((var(--scroll) - 100) / 50, 1)) * -100%));
+    transform: translateY(calc(max(0, min((var(--scroll) - 200) / 50, 1)) * -100%));
 }
 
 .project {
