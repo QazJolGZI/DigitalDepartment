@@ -217,7 +217,7 @@
         const percentScroll = htmlElement.scrollTop / htmlElement.clientHeight
         htmlElement.style.setProperty("--scroll", percentScroll * 100)
 
-        if ((percentScroll * 100) > 180) {
+        if ((percentScroll * 100) > 200) {
             // document.getElementById("suem").classList.remove("show");
             document.getElementById("suds").classList.add("show");
 
@@ -226,7 +226,7 @@
             document.getElementById("suds").classList.remove("show")
         }
 
-        if ((percentScroll * 100) > 220) {
+        if ((percentScroll * 100) > 230) {
             document.getElementById("rcmbase").classList.add("show");
 
         } else {
@@ -240,7 +240,7 @@
             document.getElementById("jolshy").classList.remove("show")
         }
 
-        if ((percentScroll * 100) > 280) {
+        if ((percentScroll * 100) > 290) {
             document.getElementById("jollab").classList.add("show");
 
         } else {
@@ -252,7 +252,7 @@
         } else {
             document.getElementById("rcmapp").classList.remove("show")
         }
-        if ((percentScroll * 100) > 400) {
+        if ((percentScroll * 100) > 380) {
             document.getElementById("footer").classList.add("show");
 
         } else {
