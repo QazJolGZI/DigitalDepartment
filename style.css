@@ -157,7 +157,7 @@
 }
 
 .section_first {
-    top: 5.375rem;
+    /*top: 5.375rem;*/
     position: sticky;
     translate: 0 calc(-1% * (max(var(--scroll), 25) - 25) * 100 / 75);
     background: #00B8F2;
@@ -173,14 +173,16 @@
 .header {
     top: 0;
     position: fixed;
-    background: #00B8F2;
+    /*background: #00B8F2;*/
     padding: 1rem;
     width: calc(100vw - 2rem);
     z-index: 4;
 }
 
 .logo {
-    height: 3.375rem;
+    /*height: 3.375rem;*/
+    width: 11.9375rem;
+
 }
 
 .white-color {
@@ -355,13 +357,14 @@
     text-decoration: none;
     border-radius: 0.75rem;
     justify-content: center;
+    align-items: center;
 }
 
 .footer {
     display: flex;
     background: #fff;
     width: 100vw;
-    height: calc(100vh - 89px);
+    height: calc(100vh - 84px);
     flex-direction: column;
     position: fixed;
     bottom: 0;
