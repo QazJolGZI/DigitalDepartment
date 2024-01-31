@@ -245,6 +245,22 @@
     to { top: 6rem; } /* до: left: 100%-50px */
 }
 
+.gray-circle-footer {
+    width: 16.4375rem;
+    height: 16.4375rem;
+    animation: gray-circle-footer 2.5s infinite alternate;
+    border-radius: 16.4375rem;
+    background: rgba(255, 255, 255, 0.19);
+    bottom: 4rem;
+    position: absolute;
+    right: -9rem;
+}
+
+@keyframes gray-circle-footer {        /* объявляем имя анимации: "go-left-right" */
+    from { bottom: 6rem }             /* от: left: 0px */
+    to { bottom: 4rem; } /* до: left: 100%-50px */
+}
+
 .scroll-down {
     display: flex;
     flex-direction: column;
@@ -376,8 +392,9 @@
 }
 
 .foot-content {
-    border-radius: 0.75rem;
-    border: 1px solid #00B8F2;
+    border-radius: 0.75rem 0.75rem 0rem 0rem;
+    /*border: 1px solid #00B8F2;*/
+    background: #00B8F2;
     display: flex;
     padding: 1.25rem;
     flex-direction: column;
@@ -389,10 +406,11 @@
     gap: 1rem;
     align-items: center;
     font-size: 18px;
+    color: #fff;
 }
 
 .foot-row a {
-    color: black;
+    color: #fff;
 
 }
 
