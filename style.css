@@ -307,7 +307,7 @@
 }
 
 .section_third {
-    height: 200vh;
+    height: 400vh;
     padding: 1rem;
     display: flex;
     flex-direction: column;
@@ -331,7 +331,7 @@
 }
 
 .projects > .top-project {
-    transform: translateY(calc(max(0, min((var(--scroll) - 200) / 50, 1)) * -100%));
+    transform: translateY(calc(max(0, min((var(--scroll) - 130) / 50, 1)) * -100%));
 }
 
 .project {
