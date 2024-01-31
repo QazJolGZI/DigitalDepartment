@@ -1,0 +1,408 @@
+@font-face {
+    font-family: 'Lato';
+    src: local('Lato Hairline'), local('Lato-Hairline'), url('static/fonts/latohairline.woff2') format('woff2'), url('static/fonts/latohairline.woff') format('woff'), url('static/fonts/latohairline.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: local('Lato Hairline Italic'), local('Lato-HairlineItalic'), url('static/fonts/latohairlineitalic.woff2') format('woff2'), url('static/fonts/latohairlineitalic.woff') format('woff'), url('static/fonts/latohairlineitalic.ttf') format('truetype');
+    font-weight: 100;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: local('Lato Thin'), local('Lato-Thin'), url('static/fonts/latothin.woff2') format('woff2'), url('static/fonts/latothin.woff') format('woff'), url('static/fonts/latothin.ttf') format('truetype');
+    font-weight: 200;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: local('Lato Thin Italic'), local('Lato-ThinItalic'), url('static/fonts/latothinitalic.woff2') format('woff2'), url('static/fonts/latothinitalic.woff') format('woff'), url('static/fonts/latothinitalic.ttf') format('truetype');
+    font-weight: 200;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: local('Lato Light'), local('Lato-Light'), url('static/fonts/latolight.woff2') format('woff2'), url('static/fonts/latolight.woff') format('woff'), url('static/fonts/latolight.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: local('Lato Light Italic'), local('Lato-LightItalic'), url('static/fonts/latolightitalic.woff2') format('woff2'), url('static/fonts/latolightitalic.woff') format('woff'), url('static/fonts/latolightitalic.ttf') format('truetype');
+    font-weight: 300;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: local('Lato Regular'), local('Lato-Regular'), url('static/fonts/latoregular.woff2') format('woff2'), url('static/fonts/latoregular.woff') format('woff'), url('static/fonts/latoregular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: local('Lato Italic'), local('Lato-Italic'), url('static/fonts/latoitalic.woff2') format('woff2'), url('static/fonts/latoitalic.woff') format('woff'), url('static/fonts/latoitalic.ttf') format('truetype');
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: local('Lato Medium'), local('Lato-Medium'), url('static/fonts/latomedium.woff2') format('woff2'), url('static/fonts/latomedium.woff') format('woff'), url('static/fonts/latomedium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: local('Lato Medium Italic'), local('Lato-MediumItalic'), url('static/fonts/latomediumitalic.woff2') format('woff2'), url('static/fonts/latomediumitalic.woff') format('woff'), url('static/fonts/latomediumitalic.ttf') format('truetype');
+    font-weight: 500;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: local('Lato Semibold'), local('Lato-Semibold'), url('static/fonts/latosemibold.woff2') format('woff2'), url('static/fonts/latosemibold.woff') format('woff'), url('static/fonts/latosemibold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: local('Lato Semibold Italic'), local('Lato-SemiboldItalic'), url('static/fonts/latosemibolditalic.woff2') format('woff2'), url('static/fonts/latosemibolditalic.woff') format('woff'), url('static/fonts/latosemibolditalic.ttf') format('truetype');
+    font-weight: 600;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: local('Lato Bold'), local('Lato-Bold'), url('static/fonts/latobold.woff2') format('woff2'), url('static/fonts/latobold.woff') format('woff'), url('static/fonts/latobold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: local('Lato Bold Italic'), local('Lato-BoldItalic'), url('static/fonts/latobolditalic.woff2') format('woff2'), url('static/fonts/latobolditalic.woff') format('woff'), url('static/fonts/latobolditalic.ttf') format('truetype');
+    font-weight: 700;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: local('Lato Heavy'), local('Lato-Heavy'), url('static/fonts/latoheavy.woff2') format('woff2'), url('static/fonts/latoheavy.woff') format('woff'), url('static/fonts/latoheavy.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: local('Lato Heavy Italic'), local('Lato-HeavyItalic'), url('static/fonts/latoheavyitalic.woff2') format('woff2'), url('static/fonts/latoheavyitalic.woff') format('woff'), url('static/fonts/latoheavyitalic.ttf') format('truetype');
+    font-weight: 800;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: local('Lato Black'), local('Lato-Black'), url('static/fonts/latoblack.woff2') format('woff2'), url('static/fonts/latoblack.woff') format('woff'), url('static/fonts/latoblack.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: local('Lato Black Italic'), local('Lato-BlackItalic'), url('static/fonts/latoblackitalic.woff2') format('woff2'), url('static/fonts/latoblackitalic.woff') format('woff'), url('static/fonts/latoblackitalic.ttf') format('truetype');
+    font-weight: 900;
+    font-style: italic;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+:root {
+    --clr-black: #000000;
+    --clr-accent: #00A4BC;
+    --clr-placeholder: #A6B1B2;
+    --clr-primary: #212A2C;
+    --clr-secondary: #95A3A5;
+    --clr-success: #06D6A0;
+
+    --weight-400: 400;
+    --weight-500: 500;
+    --weight-600: 600;
+    --weight-700: 700;
+
+    --scroll: 0;
+}
+
+.clr-accent {
+    color: var(--clr-accent);
+}
+
+.body {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Lato', sans-serif;
+    font-style: normal;
+}
+
+.section_first {
+    top: 5.375rem;
+    position: sticky;
+    translate: 0 calc(-1% * (max(var(--scroll), 25) - 25) * 100 / 75);
+    background: #00B8F2;
+    /*height: 75vh;*/
+    height: 38.6875rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+.header {
+    top: 0;
+    position: fixed;
+    background: #00B8F2;
+    padding: 1rem;
+    width: calc(100vw - 2rem);
+    z-index: 4;
+}
+
+.logo {
+    height: 3.375rem;
+}
+
+.white-color {
+    color: #FFF;
+}
+
+.xxl-text {
+    font-size: 2.25rem;
+    font-weight: 700;
+}
+
+.xl-text {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.m-text {
+    font-size: 1.25rem;
+
+}
+
+.s-text {
+    font-size: 1rem;
+
+}
+
+.xs-text {
+    font-size: 0.75rem;
+}
+
+.gray-circle-mini {
+    animation: gray-circle-mini 2.5s infinite alternate;
+    width: 16.4375rem;
+    height: 16.4375rem;
+    border-radius: 16.4375rem;
+    background: rgba(255, 255, 255, 0.19);
+    top: 4rem;
+    position: absolute;
+    left: -8rem;
+}
+
+@keyframes gray-circle-mini {        /* объявляем имя анимации: "go-left-right" */
+    from { top: 4rem }             /* от: left: 0px */
+    to { top: 8rem; } /* до: left: 100%-50px */
+}
+
+.gray-circle {
+    width: 31.25rem;
+    height: 31.25rem;
+    animation: gray-circle 2.5s infinite alternate;
+    border-radius: 16.4375rem;
+    background: rgba(255, 255, 255, 0.19);
+    top: 4rem;
+    position: absolute;
+    right: -19rem;
+}
+
+@keyframes gray-circle {        /* объявляем имя анимации: "go-left-right" */
+    from { top: 12rem }             /* от: left: 0px */
+    to { top: 6rem; } /* до: left: 100%-50px */
+}
+
+.scroll-down {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+}
+
+.section_second {
+    /*margin-top: 5.375rem;*/
+    position: relative;
+    margin-top: 40vh;
+    /* (oldVal - oldMin) * newRange / oldRange + newMin    */
+    /*translate: 0 calc(-1% * (((var(--scroll) - 100) * 200 / 100) + 200));*/
+    height: 70vh;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.box-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 1rem;
+}
+
+.box {
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.75rem;
+    background: rgba(255, 255, 255, 0.24);
+    /* shadow */
+    box-shadow: 1px 2px 12px 0 rgba(0, 0, 0, 0.20);
+    flex: 1;
+    align-items: center;
+    padding: 2rem 1rem 1rem 1rem;
+    height: 10.25rem;
+    overflow: hidden; /* Hide overflow content */
+}
+
+.box svg {
+    margin-bottom: 1rem;
+    flex-shrink: 0;
+}
+
+.box:nth-child(3) {
+    grid-column: 1 / span 2; /* Make the third box span both columns */
+}
+
+.reveal{
+    position: relative;
+    transform: translateY(150px);
+    opacity: 0;
+    transition: 2s all ease;
+}
+.reveal.active{
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.section_third {
+    height: 200vh;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.projects > .project {
+    position: fixed;
+    /*width: 100vw;*/
+    bottom: 0;
+    z-index: 6;
+    translate: 0 100%;
+    transition: translate 250ms ease-in-out;
+    left: 0;
+}
+
+.projects > .show {
+    translate: 0 0;
+}
+
+.projects > .top-project {
+    transform: translateY(calc(max(0, min((var(--scroll) - 100) / 50, 1)) * -100%));
+}
+
+.project {
+    display: flex;
+    /*background: #00B8F2;*/
+    width: calc(100vw - 2rem);
+    border-radius: 0.75rem 0.75rem 0 0;
+    padding: 2rem 1rem;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.download-button {
+    width: calc(100% - 2rem);
+    height: fit-content;
+    padding: 1rem;
+    background: #FFFFFF;
+    display: flex;
+    gap: 0.5rem;
+    color: black;
+    text-decoration: none;
+    border-radius: 0.75rem;
+    justify-content: center;
+}
+
+.footer {
+    display: flex;
+    background: #fff;
+    width: 100vw;
+    height: calc(100vh - 89px);
+    flex-direction: column;
+    position: fixed;
+    bottom: 0;
+    z-index: 6;
+    translate: 0 100%;
+    transition: translate 250ms ease-in-out;
+    left: 0;
+    justify-content: space-between;
+}
+
+.foot-content {
+    border-radius: 0.75rem;
+    border: 1px solid #00B8F2;
+    display: flex;
+    padding: 1.25rem;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.foot-row {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    font-size: 18px;
+}
+
+.foot-row a {
+    color: black;
+
+}
+
+@media (max-width: 320px) {
+    .section_second {
+        height: 100vh;
+    }
+
+    .box-container {
+        grid-template-columns: 1fr; /* Change to a single column layout */
+    }
+
+    .box:nth-child(3) {
+        grid-column: 1 / span 1; /* Make the third box span a single column */
+    }
+}
